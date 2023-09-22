@@ -4,18 +4,11 @@ import imageio
 import pandas as pd
 from django.shortcuts import render, redirect
 import openai
-import os
-import pandas as pd
 from collections import Counter
-from django.shortcuts import render
 from django.http import JsonResponse
-import os
 from plotly.subplots import make_subplots
 import plotly.graph_objs as go
-import pandas as pd
-import plotly.graph_objects as go
 import plotly.express as px
-from django.shortcuts import render
 from django.templatetags.static import static  # Import static for handling static files
 import io
 from django.http import HttpResponse 
@@ -27,11 +20,12 @@ from django.conf import settings
 
 import spacy
 
+
 # Load spaCy NER model
 nlp = spacy.load("en_core_web_sm")
 
 # Set your API key (use environment variables for security)
-openai.api_key = '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'
+openai.api_key = 'your open ai api'
 
 # Define the path to the CSV file for hotels
 csv_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'data', 'HOTELDATA.csv')
