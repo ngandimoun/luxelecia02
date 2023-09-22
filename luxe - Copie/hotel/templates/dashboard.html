@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard</title>
+    <!-- Add your CSS styling here -->
+    <style>
+        /* Example CSS for dashboard layout */
+        .dashboard-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px;
+            float: left;
+            width: 30%;
+        }
+        .dashboard-item img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <div>
+        {% for item in dashboard_items %}
+        <div class="dashboard-item">
+            <h2>{{ item.title }}</h2>
+            <p>{{ item.summary }}</p>
+            {% for image_url in item.image_urls %}
+            <img src="{{ image_url }}" alt="Image">
+            {% endfor %}
+            <a href="{% url 'dashboard:download_dashboard' item.id %}">Download</a>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
+
+{% endblock %}

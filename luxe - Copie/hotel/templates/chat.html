@@ -1,0 +1,382 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% load static %}
+
+<style>
+    /* Style for the card */
+    .card {
+        max-width: 600px; /* Adjust the maximum width as needed */
+        margin: 0 auto; /* Center the card */
+    }
+
+    /* Style for the images */
+    .card-body img {
+        max-width: 100%; /* Make the images responsive and fit within the card */
+        height: auto;
+    }
+
+    .card1 {
+        max-width: 350px; /* Adjust the maximum width as needed */
+        margin: 0 auto; /* Center the card */
+    }
+
+    /* Style for the images */
+    .card1-body img {
+        max-width: 100%; /* Make the images responsive and fit within the card */
+        height: auto;
+    }
+
+
+    
+
+   
+</style>
+
+<div class="container">
+    <h1>A.I Companion</h1>
+    <p style="font-size: 18px;">
+        "Your AI companion is here 
+        <span style="background: linear-gradient(90deg, deepskyblue, mediumorchid);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
+            <strong>to assist you</strong>
+        </span> 
+        in swiftly and effectively 
+        <span style="background: linear-gradient(90deg, deepskyblue, mediumorchid);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
+            <strong>identifying insights."</strong>
+        </span>
+    </p>
+</div>
+
+<div class="container mt-5">
+    <!-- User Input Form -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1>
+                        <span style="background: linear-gradient(90deg, deepskyblue, mediumorchid);-webkit-background-clip: text;-webkit-text-fill-color: transparent;">
+                            <strong>Ask Questions:</strong>
+                        </span>
+                    </h1>
+                    
+                    <form method="post" action="{% url 'chat' %}">
+                        {% csrf_token %}
+                        <input type="text" id="user_input" name="user_input" value="{{ request.POST.user_input }}" required class="form-control input-lg" placeholder="e.g., 'Room comparison in London' ">
+                        <button type="submit" class="btn btn-gradient">Generate</button>
+                    </form>
+                    {% if error_message %}
+                        <p class="text-danger">{{ error_message }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Display the Response Sentence -->
+        <div class="col-md-6">
+            {% if response_sentence %}
+                <div class="alert alert-success">
+                    <h4 class="alert-heading">Response:</h4>
+                    <p>{{ response_sentence }}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="chat-history">  
+        {% for interaction in interactions %}
+            <div class="message">
+                <div class="user">{{ interaction.0 }}</div>
+                <div class="response">{{ interaction.1 }}</div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="chat-controls">
+        <form method="get" action="{% url 'chat' %}">
+            <button type="submit" name="clear_history" class="clear-button">Clear History</button>
+        </form>
+    </div>
+
+    <div class="row">
+        {% if chart_html %}
+            <div>
+                <div class="card">
+                    <div class="card-body">
+                        <!-- Display the Plotly chart for Total Travelers Over Time -->
+                        <div id="unique_chart_id">
+                            {{ chart_html | safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}    
+    </div>
+
+    <div class="row">
+        {% if chart_html1 %}
+            <div>
+                <div class="card">
+                    <div class="card-body">
+                        
+                        <div id="unique_chart_id1">
+                            {{ chart_html1 | safe }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}    
+    </div>
+
+
+    <div class="row">
+        {% if html_image1 %}
+            <div>
+                <div class="card1">
+                    <div class="card-body">
+                        <!-- image -->
+                        <div id="html_image1">
+                            <img src="{% static 'img/promotion/Beige Minimalist Hotel and Resort Promotion Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Beige Minimalist Hotel and Resort Promotion Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Beige Minimalist Hotel and Resort Promotion Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Black and White Creative Minimalist Hotel Resort Promotion Instagram Post.png' %}" alt="Logo">
+                            <a href="{% static 'img/promotion/Black and White Creative Minimalist Hotel Resort Promotion Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Black and White Creative Minimalist Hotel Resort Promotion Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Black and White Modern Hotel Sale Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Black and White Modern Hotel Sale Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Black and White Modern Hotel Sale Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Blue Five Stars Hotel Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Blue Five Stars Hotel Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Blue Five Stars Hotel Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Blue Hotel Promo Poster.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Blue Hotel Promo Poster.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Blue Hotel Promo Poster.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Brown Modern Aldenaire Hotel Promotion Poster.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Brown Modern Aldenaire Hotel Promotion Poster.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Brown Modern Aldenaire Hotel Promotion Poster.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Brown Modern Hotel Booking Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Brown Modern Hotel Booking Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Brown Modern Hotel Booking Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            <br>
+                            <img src="{% static 'img/promotion/Brown Modern Hotel Booking Online Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Brown Modern Hotel Booking Online Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Brown Modern Hotel Booking Online Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Brown Simple Ginyard Hotel Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Brown Simple Ginyard Hotel Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Brown Simple Ginyard Hotel Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Dark Gray and White Modern Hotel Promotion Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Dark Gray and White Modern Hotel Promotion Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Dark Gray and White Modern Hotel Promotion Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Gray Modern Hotel Promo Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Gray Modern Hotel Promo Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Gray Modern Hotel Promo Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Green and Yellow Modern Hotel Promotion Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Green and Yellow Modern Hotel Promotion Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Green and Yellow Modern Hotel Promotion Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Hotel and Restaurant Discount Promo Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Hotel and Restaurant Discount Promo Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Hotel and Restaurant Discount Promo Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Hotel Promotion Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Hotel Promotion Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Hotel Promotion Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/Hotel Room Instagram Post Template.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/Hotel Room Instagram Post Template.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/Hotel Room Instagram Post Template.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/promotion/White Yellow Brown Minimalist Hotel Promotion Instagram Post.png' %}" alt="Mama">
+                            <a href="{% static 'img/promotion/White Yellow Brown Minimalist Hotel Promotion Instagram Post.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/promotion/White Yellow Brown Minimalist Hotel Promotion Instagram Post.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                        
+                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+
+
+
+    <div class="row">
+        {% if html_image2 %}
+            <div>
+                <div class="card1">
+                    <div class="card-body">
+                        <!-- image -->
+                        <div id="html_image2">
+                            <img src="{% static 'img/thanks/Aesthetic Thank You (Card (Landscape)).png' %}" alt="Mama">
+                            <a href="{% static 'img/thanks/Aesthetic Thank You (Card (Landscape)).png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/thanks/Aesthetic Thank You (Card (Landscape)).pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/thanks/Beige Aesthetic Thank You Card .png' %}" alt="Logo">
+                            <a href="{% static 'img/thanks/Beige Aesthetic Thank You Card .png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/thanks/Beige Aesthetic Thank You Card .pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/thanks/Black Leaves Thank You Card.png' %}" alt="Mama">
+                            <a href="{% static 'img/thanks/Black Leaves Thank You Card.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/thanks/Black Leaves Thank You Card.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/thanks/Blue Watercolor Thank You Card.png' %}" alt="Mama">
+                            <a href="{% static 'img/thanks/Blue Watercolor Thank You Card.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/thanks/Blue Watercolor Thank You Card.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/thanks/Brown Craft Minimalist Thank You Card.png' %}" alt="Mama">
+                            <a href="{% static 'img/thanks/Brown Craft Minimalist Thank You Card.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/thanks/Brown Craft Minimalist Thank You Card.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/thanks/Minimalist Thank You Card .png' %}" alt="Mama">
+                            <a href="{% static 'img/thanks/Minimalist Thank You Card .png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/thanks/Minimalist Thank You Card .pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+
+                            <img src="{% static 'img/thanks/purple modern thank you card .png' %}" alt="Mama">
+                            <a href="{% static 'img/thanks/purple modern thank you card .png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/thanks/purple modern thank you card .pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            
+                            <br>
+                            
+                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+
+    <div class="row">
+        {% if html_image3 %}
+            <div>
+                <div class="card1">
+                    <div class="card-body">
+                        <!-- image -->
+                        <div id="html_image3">
+                            <img src="{% static 'img/welcome/Blue and Green Watercolor Winter Pine Forest Welcome Wedding Card.png' %}" alt="Mama">
+                            <a href="{% static 'img/welcome/Blue and Green Watercolor Winter Pine Forest Welcome Wedding Card.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/welcome/Blue and Green Watercolor Winter Pine Forest Welcome Wedding Card.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            <br>
+                            <img src="{% static 'img/welcome/Gold Leaf Border Welcome Wedding Place Card.png' %}" alt="Logo">
+                            <a href="{% static 'img/welcome/Gold Leaf Border Welcome Wedding Place Card.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/welcome/Gold Leaf Border Welcome Wedding Place Card.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            <br>
+                            <img src="{% static 'img/welcome/White Minimalist Beach Resort Hotel Enjoy Your Holiday Card.png' %}" alt="Mama">
+                            <a href="{% static 'img/welcome/White Minimalist Beach Resort Hotel Enjoy Your Holiday Card.png' %}" class="btn btn-gradient" download>Download</a>
+                            <a href="{% static 'img/welcome/White Minimalist Beach Resort Hotel Enjoy Your Holiday Card.pptx' %}" class="btn btn-gradient" download>Edit</a>
+                            <br>
+                            
+                            
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+    
+    
+</div>
+
+
+
+
+<div class="row">
+    {% if ppt %}
+        <div>
+            <div class="card">
+                <div class="card-body">
+                    <h2>Report Generated</h2>
+                    <div id="ppt">
+                        <img src="{% static 'img/white sample2.png' %}" alt="white sample2">
+                        <a href="{% static 'powerpoints/White Sample2.pptx' %}" type="submit" class="btn btn-gradient" download>Download {{ ppt_file.name }}</a>
+            
+                        <br>
+            
+                        <img src="{% static 'img/white sample.png' %}" alt="white sample">
+                        <a href="{% static 'powerpoints/White Sample.pptx' %}" type="submit" class="btn btn-gradient" download>Download {{ ppt_file.name }}</a>
+            
+                        <br>
+            
+                        <img src="{% static 'img/white sample3.png' %}" alt="white sample3">
+                        <a href="{% static 'powerpoints/White Sample3.pptx' %}" type="submit" class="btn btn-gradient" download>Download {{ ppt_file.name }}</a>
+            
+                        <br>
+            
+                        <img src="{% static 'img/black sample.png' %}" alt="black sample">
+                        <a href="{% static 'powerpoints/Black Sample.pptx' %}" type="submit" class="btn btn-gradient" download>Download {{ ppt_file.name }}</a>
+            
+                        <br>
+            
+                        <img src="{% static 'img/black and gold sample.png' %}" alt="black and gold sample">
+                        <a href="{% static 'powerpoints/Black and Gold Sample.pptx' %}" type="submit" class="btn btn-gradient" download>Download {{ ppt_file.name }}</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    {% endif %}
+</div>
+
+
+</div>
+
+
+
+{% endblock %}

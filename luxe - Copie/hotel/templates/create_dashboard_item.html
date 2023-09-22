@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Dashboard Item</title>
+</head>
+<body>
+    <h1>Create Dashboard Item</h1>
+    <form method="post" enctype="multipart/form-data" id="createDashboardForm">
+        {% csrf_token %}
+        
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title"><br><br>
+
+        <label for="summary">Summary:</label>
+        <textarea name="summary" id="summary"></textarea><br><br>
+
+        <label for="images">Images:</label>
+        <input type="file" name="images" id="images" multiple><br><br>
+
+        <button type="submit">Create Dashboard Item</button>
+    </form>
+</body>
+</html>
+{% endblock %}

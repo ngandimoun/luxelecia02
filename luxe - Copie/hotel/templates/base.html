@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxelecia | {% block title %}  {% endblock %}</title>
+
+    <!-- External CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
+    <link href="{% static 'css/main.css' %}" rel="stylesheet">
+    <link href="{% static 'css/dashboard.css' %}" rel="stylesheet">
+
+    <!-- External JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    <!-- Custom CSS -->
+    <style>
+        /* General Styles */
+        body {
+            background-color: #f7f7f7;
+            color: #000;
+        }
+
+        /* Navbar Styles */
+        .navbar {
+            background-color: deepskyblue;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 2; /* Ensure it's above the sidebar */
+            transition: top 0.3s;
+        }
+
+        .navbar a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 15px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+
+        .navbar a:hover {
+            background-color: #ddd;
+            color: #000;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #fffefe62;
+            overflow-x: hidden;
+            transition: width 0.5s ease-in-out;
+            padding-top: 60px;
+        }
+
+        .sidebar a {
+            padding: 8px 8px 8px 32px;
+            text-decoration: none;
+            font-size: 25px;
+            color: #818181;
+            display: block;
+            transition: 0.3s;
+        }
+
+        .sidebar a:hover {
+            color: #f1f1f1;
+        }
+
+        .sidebar .closebtn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            margin-left: 50px;
+        }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: #111;
+            color: #fff;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+        }
+
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+
+        /* On smaller screens */
+        @media screen and (max-height: 450px) {
+            .sidebar {
+                padding-top: 15px;
+            }
+            .sidebar a {
+                font-size: 18px;
+            }
+        }
+
+        /* Sidebar Link Styles */
+        .nav-link {
+            /* Gradient background on hover */
+            background: linear-gradient(90deg, deepskyblue, mediumorchid);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        /* Active Sidebar Link Styles */
+        .nav-link.active-item {
+            background: linear-gradient(90deg, deepskyblue, mediumorchid);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Button Gradient Hover Effect */
+        .btn-gradient:hover {
+            background: linear-gradient(90deg, deepskyblue, mediumorchid);
+            color: #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            transition: all 0.3s ease;
+        }
+
+        /* Custom Styles for Chat */
+        .chat-history {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 5px;
+            max-height: 300px;
+            overflow-y: scroll;
+        }
+
+        .message {
+            margin: 10px 0;
+        }
+
+        .user {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .response {
+            background-color: #e5e5e5;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .clear-button {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .clear-button:hover {
+            background-color: #c82333;
+        }
+
+        /* Dark Mode Styles */
+        .dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+
+        .dark-mode .navbar {
+            background-color: #111;
+        }
+
+        .dark-mode .navbar a {
+            color: #f2f2f2;
+        }
+
+        .dark-mode .sidebar {
+            background-color: #222;
+        }
+
+        .dark-mode .sidebar a {
+            color: #ccc;
+        }
+
+        .dark-mode .sidebar a:hover {
+            color: #fff;
+        }
+
+        .dark-mode .nav-link {
+            background: linear-gradient(90deg, deepskyblue, mediumorchid);
+            color: #fff;
+        }
+
+        .dark-mode .nav-link.active-item {
+            background: linear-gradient(90deg, deepskyblue, mediumorchid);
+            color: #fff;
+        }
+
+        .dark-mode .btn-gradient:hover {
+            background: linear-gradient(90deg, deepskyblue, mediumorchid);
+            color: #fff;
+        }
+
+        .dark-mode .chat-history {
+            background-color: #222;
+            color: #fff;
+        }
+
+        .dark-mode .user {
+            color: #007bff;
+        }
+
+        .dark-mode .clear-button {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .dark-mode .clear-button:hover {
+            background-color: #c82333;
+        }
+
+        /* Dark Mode Toggle Styles */
+        .dark-mode-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 3;
+        }
+
+        .dark-mode-toggle input[type="checkbox"] {
+            display: none;
+        }
+
+        .dark-mode-toggle label {
+            background-color: #fff;
+            border-radius: 20px;
+            display: inline-block;
+            height: 20px;
+            width: 40px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dark-mode-toggle label:after {
+            content: "";
+            background-color: #333;
+            border-radius: 50%;
+            height: 16px;
+            width: 16px;
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            transition: 0.3s;
+        }
+
+        .dark-mode-toggle input[type="checkbox"]:checked + label:after {
+            left: 22px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Dark Mode Toggle -->
+    <div id="dark-mode-toggle" class="dark-mode-toggle">
+        <input type="checkbox" id="dark-mode-checkbox">
+        <label for="dark-mode-checkbox"></label>
+    </div>
+
+    <!-- Sidebar -->
+    <div id="mySidebar" class="sidebar">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+        <!-- Add sidebar links here -->
+        <a class="nav-link {% if request.resolver_match.url_name == 'chat' %}active-item{% endif %}" href="{% url 'chat' %}">Home dashboard</a>     
+     
+    </div>
+
+    <!-- Open Sidebar Button -->
+    <div id="main" style="margin-top: 28px;">
+        <button class="openbtn" onclick="toggleNav()">☰</button>
+    </div>
+
+    <div id="navbar">
+        <!-- Navbar -->
+        <nav class="navbar navbar-dark navbar-gradient flex-md-nowrap p-0 shadow">
+            <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#" style="padding-left: 20px; font-weight: bold;">Luxelecia</a>
+        </nav>
+    </div>
+    <!-- Main Content -->
+    <div class="container-fluid">
+        <div class="row">
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" id="main-content">
+                {% block content %} {% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
+    <script src="{% static 'js/main.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.7.0/dist/js/bootstrap.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        let sidebarOpen = false;
+
+        function toggleNav() {
+            const sidebar = document.getElementById("mySidebar");
+            const main = document.getElementById("main");
+
+            if (!sidebarOpen) {
+                sidebar.style.width = "250px";
+                main.style.marginLeft = "250px";
+                sidebarOpen = true;
+            } else {
+                sidebar.style.width = "0";
+                main.style.marginLeft = "0";
+                sidebarOpen = false;
+            }
+        }
+
+        $(document).ready(function() {
+            $(".nav-link").click(function() {
+                $(".nav-link").removeClass("active-item");
+                $(this).addClass("active-item");
+            });
+        });
+
+        // Close sidebar when a link is clicked
+        $(".nav-link").click(function() {
+            toggleNav();
+        });
+
+        $(document).ready(function () {
+            $('.selectpicker').selectpicker();
+        });
+    </script>
+
+    <!-- Dark Mode JavaScript -->
+    <script>
+        const darkModeToggle = document.getElementById("dark-mode-toggle");
+        const darkModeCheckbox = document.getElementById("dark-mode-checkbox");
+        const body = document.body;
+
+        // Check the user's preference for dark mode from local storage (optional)
+        const isDarkMode = localStorage.getItem("darkMode") === "true";
+
+        // Initialize the dark mode based on the user's preference
+        if (isDarkMode) {
+            body.classList.add("dark-mode");
+            darkModeCheckbox.checked = true;
+        }
+
+        // Toggle dark mode
+        darkModeToggle.addEventListener("change", () => {
+            body.classList.toggle("dark-mode");
+            const isDarkModeEnabled = body.classList.contains("dark-mode");
+            localStorage.setItem("darkMode", isDarkModeEnabled);
+        });
+
+        // Function to set the initial mode
+        function setInitialMode() {
+            if (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) {
+                body.classList.add("dark-mode");
+                darkModeCheckbox.checked = true;
+                localStorage.setItem("darkMode", true);
+            }
+        }
+
+        setInitialMode();
+    </script>
+</body>
+</html>

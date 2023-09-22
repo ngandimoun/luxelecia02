@@ -1,0 +1,38 @@
+{% load static %}
+
+<nav class="col-md-2 d-none d-md-block bg-light sidebar">
+  <div class="sidebar-sticky">
+    <ul class="nav flex-column">
+      <li class="nav-item">
+      <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active-item{% endif %}" href="{% url 'home' %}">Events & Attractions</a>     
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'room_type_bar_chart' %}active-item{% endif %}" href="{% url 'room_type_bar_chart' %}">Gastronomy Analysis</a>     
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'event_types_breakdown' %}active-item{% endif %}" href="{% url 'event_types_breakdown' %}">Customers Profiling</a>     
+      </li>
+    </ul>
+
+    <ul class="nav flex-column mb-2">
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'travelers_over_time' %}active-item{% endif %}" href="{% url 'travelers_over_time' %}">Bespoke Itineraries</a>     
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'room_price_comparison' %}active-item{% endif %}" href="{% url 'room_price_comparison' %}">Bespoke Messages</a>     
+      </li>
+      <li class="nav-item">
+        <a class="nav-link {% if request.resolver_match.url_name == 'room_price_comparison' %}active-item{% endif %}" href="{% url 'room_price_comparison' %}">Bespoke Pricing</a>     
+      </li>
+    </ul>
+
+    <ul class="nav flex-column mb-2">
+      <li class="nav-item">
+        <a class="nav-link" href="#">
+          <span data-feather="file-text"></span>
+          Account
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>
